@@ -20,47 +20,52 @@ El objetivo del proyecto es validar funcionalidades relacionadas con la **búsqu
 # Estructura del Proyecto
 
 El proyecto sigue la arquitectura **Screenplay**, que separa responsabilidades para mantener el código limpio, reutilizable y fácil de mantener.
+
+## Estructura del Proyecto
+
+```text
 src
 ├── main
-│ └── java
-│ └── com.travelocity
-│ ├── models
-│ │ ├── CiudadDeEstadia.java
-│ │ └── HabitacionesEstadia.java
-│ │
-│ ├── pageobjects
-│ │ └── HomeConsultaHotelPageObject.java
-│ │
-│ ├── questions
-│ │ ├── HayUnError.java
-│ │ └── LaUbicacionDelHotel.java
-│ │
-│ ├── tasks
-│ │ ├── SeleccionarDestino.java
-│ │ ├── SeleccionarFecha.java
-│ │ ├── AgregarHabitacionYViajeros.java
-│ │ └── AjustarHabitacionesYViajeros.java
-│ │
-│ └── utils
-│ └── UtilidadesFechas.java
+│   └── java
+│       └── com.travelocity
+│           ├── models
+│           │   ├── CiudadDeEstadia.java
+│           │   └── HabitacionesEstadia.java
+│           │
+│           ├── pageobjects
+│           │   └── HomeConsultaHotelPageObject.java
+│           │
+│           ├── questions
+│           │   ├── HayUnError.java
+│           │   └── LaUbicacionDelHotel.java
+│           │
+│           ├── tasks
+│           │   ├── SeleccionarDestino.java
+│           │   ├── SeleccionarFecha.java
+│           │   ├── AgregarHabitacionYViajeros.java
+│           │   └── AjustarHabitacionesYViajeros.java
+│           │
+│           └── utils
+│               └── UtilidadesFechas.java
 │
 └── test
-└── java
-└── com.travelocity
-├── runners
-│ └── BuscarHotelRunner.java
-│
-└── stepdefinitions
-├── BuscarHotelStepDefinitions.java
-└── Hook.java
+    └── java
+        └── com.travelocity
+            ├── runners
+            │   └── BuscarHotelRunner.java
+            │
+            └── stepdefinitions
+                ├── BuscarHotelStepDefinitions.java
+                └── Hook.java
 
-resources
-└── features
-├── BuscarHotel.feature
-├── InicioSesion.feature
-└── Registro.feature
-
-
+src
+└── test
+    └── resources
+        └── features
+            ├── BuscarHotel.feature
+            ├── InicioSesion.feature
+            └── Registro.feature
+```
 ---
 
 # Descripción de cada módulo
@@ -251,5 +256,6 @@ La lógica de automatización y la arquitectura del proyecto se mantienen, pero 
 ---
 
 # Autor
+
 
 Proyecto desarrollado como ejercicio de automatización utilizando Serenity BDD y Screenplay Pattern.
