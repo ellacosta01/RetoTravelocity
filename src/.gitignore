@@ -1,0 +1,8 @@
+.gradle/
+build/
+target/
+out/
+*.log
+chromedriver.exe
+.idea/
+*.iml

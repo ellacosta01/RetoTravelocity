@@ -8,7 +8,8 @@ import net.serenitybdd.screenplay.Question;
 import java.util.List;
 
 public class LaUbicacionDelHotel implements Question<Boolean> {
-    String destino;
+
+    private final String destino;
 
     public LaUbicacionDelHotel(String destino) {
         this.destino = destino;
@@ -18,12 +19,9 @@ public class LaUbicacionDelHotel implements Question<Boolean> {
     public Boolean answeredBy(Actor actor) {
         List<WebElementFacade> listaUbicaciones =
                 HomeConsultaHotelPageObject.LBL_UBICACION_DE_HOTEL.resolveAllFor(actor);
-        for (WebElementFacade ubicacionWeb : listaUbicaciones) {
-            if (ubicacionWeb.getText().equals(destino)) {
-                return true;
-            }
-        }
-        return false;
+
+        return listaUbicaciones.stream()
+                .anyMatch(ubicacionWeb -> ubicacionWeb.getText().equals(destino));
     }
 
     public static LaUbicacionDelHotel apareceEnAlMenosUnResultado(String destino) {

@@ -11,7 +11,7 @@ import java.util.List;
 
 public class AjustarHabitacionesYViajeros implements Task {
 
-    List<HabitacionesEstadia> listaHabitacionesEstadia;
+    private final List<HabitacionesEstadia> listaHabitacionesEstadia;
 
     public AjustarHabitacionesYViajeros(List<HabitacionesEstadia> listaHabitacionesEstadia) {
         this.listaHabitacionesEstadia = listaHabitacionesEstadia;
@@ -20,46 +20,62 @@ public class AjustarHabitacionesYViajeros implements Task {
     @Override
     public <T extends Actor> void performAs(T actor) {
         for (HabitacionesEstadia habitacionesEstadia : listaHabitacionesEstadia) {
-            if (HomeConsultaHotelPageObject.DIV_HABITACION.
-                    of(habitacionesEstadia.getHabitacion()).resolveAllFor(actor).size() == 0) {
+
+            if (HomeConsultaHotelPageObject.DIV_HABITACION
+                    .of(habitacionesEstadia.getHabitacion())
+                    .resolveAllFor(actor).isEmpty()) {
                 actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_HABITACION));
             }
-            // Variable necesaria para algunas parametrizaciones
-            String strHabitacionDesdeIndiceCero =
-                    Integer.toString(Integer.parseInt(habitacionesEstadia.getHabitacion()) - 1);
-            String adultosActualesEnHabitacion = HomeConsultaHotelPageObject.LBL_ADULTOS.
-                    of(strHabitacionDesdeIndiceCero).resolveFor(actor).getValue();
-            String jovenesActualesEnHabitacion = HomeConsultaHotelPageObject.LBL_JOVENES.
-                    of(strHabitacionDesdeIndiceCero).resolveFor(actor).getValue();
-            // Agregar adultos si el numero esperado es mayor
-            while (Integer.parseInt(adultosActualesEnHabitacion)
-                    < Integer.parseInt(habitacionesEstadia.getAdultos())) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_ADULTO.of(strHabitacionDesdeIndiceCero)));
-                adultosActualesEnHabitacion = HomeConsultaHotelPageObject.LBL_ADULTOS.
-                        of(strHabitacionDesdeIndiceCero).resolveFor(actor).getValue();
+
+            int indiceHabitacion = Integer.parseInt(habitacionesEstadia.getHabitacion()) - 1;
+            String habitacionIndex = String.valueOf(indiceHabitacion);
+
+            int adultosEsperados = Integer.parseInt(habitacionesEstadia.getAdultos());
+            int jovenesEsperados = Integer.parseInt(habitacionesEstadia.getJovenes());
+
+            int adultosActuales = Integer.parseInt(
+                    HomeConsultaHotelPageObject.LBL_ADULTOS
+                            .of(habitacionIndex).resolveFor(actor).getValue()
+            );
+
+            int jovenesActuales = Integer.parseInt(
+                    HomeConsultaHotelPageObject.LBL_JOVENES
+                            .of(habitacionIndex).resolveFor(actor).getValue()
+            );
+
+            while (adultosActuales < adultosEsperados) {
+                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_ADULTO.of(habitacionIndex)));
+                adultosActuales = Integer.parseInt(
+                        HomeConsultaHotelPageObject.LBL_ADULTOS
+                                .of(habitacionIndex).resolveFor(actor).getValue()
+                );
             }
-            // Retirar adultos si el numero esperado es menor
-            while (Integer.parseInt(adultosActualesEnHabitacion)
-                    > Integer.parseInt(habitacionesEstadia.getAdultos())) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_ADULTO.of(strHabitacionDesdeIndiceCero)));
-                adultosActualesEnHabitacion = HomeConsultaHotelPageObject.LBL_ADULTOS.
-                        of(strHabitacionDesdeIndiceCero).resolveFor(actor).getText();
+
+            while (adultosActuales > adultosEsperados) {
+                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_ADULTO.of(habitacionIndex)));
+                adultosActuales = Integer.parseInt(
+                        HomeConsultaHotelPageObject.LBL_ADULTOS
+                                .of(habitacionIndex).resolveFor(actor).getValue()
+                );
             }
-            // Agregar jovenes si el numero esperado es mayor
-            while (Integer.parseInt(jovenesActualesEnHabitacion)
-                    < Integer.parseInt(habitacionesEstadia.getJovenes())) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_JOVEN.of(strHabitacionDesdeIndiceCero)));
-                jovenesActualesEnHabitacion = HomeConsultaHotelPageObject.LBL_JOVENES.
-                        of(strHabitacionDesdeIndiceCero).resolveFor(actor).getValue();
+
+            while (jovenesActuales < jovenesEsperados) {
+                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_JOVEN.of(habitacionIndex)));
+                jovenesActuales = Integer.parseInt(
+                        HomeConsultaHotelPageObject.LBL_JOVENES
+                                .of(habitacionIndex).resolveFor(actor).getValue()
+                );
             }
-            // Retirar jovenes si el numero esperado es menor
-            while (Integer.parseInt(jovenesActualesEnHabitacion)
-                    > Integer.parseInt(habitacionesEstadia.getJovenes())) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_JOVEN.of(strHabitacionDesdeIndiceCero)));
-                jovenesActualesEnHabitacion = HomeConsultaHotelPageObject.LBL_JOVENES.
-                        of(strHabitacionDesdeIndiceCero).resolveFor(actor).getValue();
+
+            while (jovenesActuales > jovenesEsperados) {
+                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_JOVEN.of(habitacionIndex)));
+                jovenesActuales = Integer.parseInt(
+                        HomeConsultaHotelPageObject.LBL_JOVENES
+                                .of(habitacionIndex).resolveFor(actor).getValue()
+                );
             }
         }
+
         actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_VIAJEROS_DONE));
     }
 

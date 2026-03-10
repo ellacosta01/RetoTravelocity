@@ -1,7 +1,7 @@
 package com.travelocity.stepdefinitions;
 
-import cucumber.api.java.Before;
-import cucumber.api.java.es.Dado;
+import io.cucumber.java.Before;
+import io.cucumber.java.es.Dado;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actions.Open;
 import net.serenitybdd.screenplay.actors.OnStage;
@@ -15,13 +15,15 @@ public class Hook {
     private WebDriver hisBrowser;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         OnStage.setTheStage(new OnlineCast());
         OnStage.theActorCalled("El usuario").can(BrowseTheWeb.with(hisBrowser));
     }
 
-    @Dado("^que ingreso al portal travelocity\\.com$")
+    @Dado("que ingreso al portal travelocity.com")
     public void queIngresoAlPortalTravelocityCom() {
-        OnStage.theActorInTheSpotlight().attemptsTo(Open.url("https://www.travelocity.com/"));
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                Open.url("https://www.travelocity.com/")
+        );
     }
 }

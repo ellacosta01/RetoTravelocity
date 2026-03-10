@@ -3,8 +3,6 @@ package com.travelocity.questions;
 import com.travelocity.pageobjects.HomeConsultaHotelPageObject;
 import net.serenitybdd.screenplay.Question;
 
-import java.util.List;
-
 public class HayUnError {
 
     public static Question<Boolean> enElFormularioDeViajeros() {

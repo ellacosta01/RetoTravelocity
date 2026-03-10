@@ -1,7 +1,6 @@
 package com.travelocity.tasks;
 
 import com.travelocity.pageobjects.HomeConsultaHotelPageObject;
-import com.travelocity.utils.UtilidadesFechas;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Performable;
 import net.serenitybdd.screenplay.Task;
@@ -12,10 +11,10 @@ import static com.travelocity.utils.UtilidadesFechas.estaLaFechaPresente;
 
 public class SeleccionarFecha implements Task {
 
-    String dia;
-    String mes;
-    String year;
-    String operacion;
+    private final String dia;
+    private final String mes;
+    private final String year;
+    private final String operacion;
 
     public SeleccionarFecha(String dia, String mes, String year, String operacion) {
         this.dia = dia;
@@ -27,7 +26,7 @@ public class SeleccionarFecha implements Task {
     @Override
     public <T extends Actor> void performAs(T actor) {
         String mesYear = mes + " " + year;
-        // Click al botn de seleccionar fecha en el formulario
+
         switch (operacion.toLowerCase()) {
             case "checkin":
                 actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CHECK_IN));
@@ -35,18 +34,23 @@ public class SeleccionarFecha implements Task {
             case "checkout":
                 actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CHECK_OUT));
                 break;
+            default:
+                throw new IllegalArgumentException("Operacion no soportada: " + operacion);
         }
-        // Click n veces al boton de avanzar fecha
+
         while (!estaLaFechaPresente(
                 HomeConsultaHotelPageObject.LBL_MES_YEAR_EN_CALENDARIO.resolveAllFor(actor),
                 mesYear)) {
             actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_SIGUIENTE_MES));
         }
-        // Click en el numero de dia
+
         String inicialesMes = mes.substring(0, 3);
         String localizador = inicialesMes + " " + dia + ", " + year;
-        actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_DIA_EN_CALENDARIO.of(localizador)));
-        actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CALENDARIO_DONE));
+
+        actor.attemptsTo(
+                Click.on(HomeConsultaHotelPageObject.BTN_DIA_EN_CALENDARIO.of(localizador)),
+                Click.on(HomeConsultaHotelPageObject.BTN_CALENDARIO_DONE)
+        );
     }
 
     public static SeleccionarFecha deCheckIn(String checkInDia, String checkInMes, String checkInYear) {
