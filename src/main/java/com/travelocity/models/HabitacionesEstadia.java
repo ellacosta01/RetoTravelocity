@@ -2,9 +2,9 @@ package com.travelocity.models;
 
 public class HabitacionesEstadia {
 
-    String habitacion;
-    String adultos;
-    String jovenes;
+    private final String habitacion;
+    private final String adultos;
+    private final String jovenes;
 
     public HabitacionesEstadia(String habitacion, String adultos, String jovenes) {
         this.habitacion = habitacion;

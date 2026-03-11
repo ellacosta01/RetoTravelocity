@@ -17,11 +17,12 @@ public class LaUbicacionDelHotel implements Question<Boolean> {
 
     @Override
     public Boolean answeredBy(Actor actor) {
-        List<WebElementFacade> listaUbicaciones =
+        List<WebElementFacade> ubicaciones =
                 HomeConsultaHotelPageObject.LBL_UBICACION_DE_HOTEL.resolveAllFor(actor);
 
-        return listaUbicaciones.stream()
-                .anyMatch(ubicacionWeb -> ubicacionWeb.getText().equals(destino));
+        return ubicaciones.stream()
+                .map(WebElementFacade::getText)
+                .anyMatch(textoUbicacion -> textoUbicacion.contains(destino));
     }
 
     public static LaUbicacionDelHotel apareceEnAlMenosUnResultado(String destino) {

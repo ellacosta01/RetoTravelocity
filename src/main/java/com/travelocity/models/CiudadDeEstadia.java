@@ -2,13 +2,13 @@ package com.travelocity.models;
 
 public class CiudadDeEstadia {
 
-    private String destino;
-    private String checkInDia;
-    private String checkInMes;
-    private String checkInYear;
-    private String checkOutDia;
-    private String checkOutMes;
-    private String checkOutYear;
+    private final String destino;
+    private final String checkInDia;
+    private final String checkInMes;
+    private final String checkInYear;
+    private final String checkOutDia;
+    private final String checkOutMes;
+    private final String checkOutYear;
 
     public CiudadDeEstadia(
             String destino,

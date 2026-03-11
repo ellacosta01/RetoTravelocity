@@ -1,24 +1,28 @@
-# Reto Travelocity - Automatización de Búsqueda de Hoteles
+# Travelocity Hotel Search Automation Framework
 
-Proyecto de automatización de pruebas para el portal **Travelocity**, desarrollado utilizando **Serenity BDD**, **Screenplay Pattern**, **Cucumber** y **Gradle**.
+Automated test framework built using **Serenity BDD**, **Cucumber**, and the **Screenplay Pattern** to validate the hotel search functionality on **Travelocity**.
 
-El objetivo del proyecto es validar funcionalidades relacionadas con la **búsqueda de hoteles**, manejo de **habitaciones y viajeros**, así como la **validación de mensajes de error en formularios**.
-
----
-
-# Tecnologías utilizadas
-
-- Java
-- Serenity BDD
-- Cucumber
-- Screenplay Pattern
-- Gradle
-- Selenium WebDriver
+This project demonstrates a clean automation architecture with reusable tasks, questions, models, and page objects, following best practices for maintainable UI automation testing.
 
 ---
 
-# Estructura del Proyecto
+# Overview
 
+This framework automates the process of searching for hotels on the Travelocity website.
+It validates different scenarios such as:
+
+* Successful hotel search
+* Traveler form validation
+* Hotel search form errors
+* Verification of hotel location in results
+
+The automation is implemented using the **Screenplay Pattern**, which improves readability, maintainability, and separation of concerns.
+
+---
+
+# Technologies Used
+
+<<<<<<< HEAD
 El proyecto sigue la arquitectura **Screenplay**, que separa responsabilidades para mantener el código limpio, reutilizable y fácil de mantener.
 
 ## Estructura del Proyecto
@@ -57,6 +61,57 @@ src
             └── stepdefinitions
                 ├── BuscarHotelStepDefinitions.java
                 └── Hook.java
+=======
+| Technology         | Purpose                                  |
+| ------------------ | ---------------------------------------- |
+| Java               | Main programming language                |
+| Serenity BDD       | Test reporting and framework integration |
+| Cucumber           | BDD test scenarios                       |
+| Screenplay Pattern | Test architecture                        |
+| Selenium WebDriver | Browser automation                       |
+| Gradle             | Dependency management and build tool     |
+
+---
+
+# Project Structure
+
+```
+src
+ └─ test
+    ├─ java
+    │  └─ com.travelocity
+    │      ├─ models
+    │      │     HabitacionesEstadia.java
+    │      │     CiudadDeEstadia.java
+    │      │
+    │      ├─ pageobjects
+    │      │     HomeConsultaHotelPageObject.java
+    │      │
+    │      ├─ questions
+    │      │     HayUnError.java
+    │      │     LaUbicacionDelHotel.java
+    │      │
+    │      ├─ runners
+    │      │     BuscarHotelRunner.java
+    │      │
+    │      ├─ stepdefinitions
+    │      │     BuscarHotelStepDefinitions.java
+    │      │     Hooks.java
+    │      │
+    │      ├─ tasks
+    │      │     SeleccionarDestino.java
+    │      │     SeleccionarFecha.java
+    │      │     AgregarHabitacionYViajeros.java
+    │      │     AjustarHabitacionesYViajeros.java
+    │      │
+    │      └─ utils
+    │            UtilidadesFechas.java
+    │
+    └─ resources
+        └─ features
+              BuscarHotel.feature
+```
+>>>>>>> 705e4df (Add readme y mejora de la estructura)
 
 src
 └── test
@@ -68,194 +123,171 @@ src
 ```
 ---
 
-# Descripción de cada módulo
+# Test Architecture
 
-## models
-Contiene las clases que representan los **datos utilizados en los escenarios de prueba**.
+This project follows the **Screenplay Pattern**, which models user interactions as actors performing tasks and asking questions.
 
-- **CiudadDeEstadia**
-  Representa la información necesaria para realizar la búsqueda de un hotel:
-  - destino
-  - fecha de check-in
-  - fecha de check-out
+### Actor
 
-- **HabitacionesEstadia**
-  Representa la configuración de habitaciones y viajeros:
-  - número de habitación
-  - adultos
-  - jóvenes
+Represents the user interacting with the application.
 
-Estas clases permiten que Cucumber convierta las tablas de los escenarios en objetos Java.
+### Tasks
 
----
+Encapsulate user actions such as:
 
-## pageobjects
+* Selecting destination
+* Choosing check-in and check-out dates
+* Adding rooms and travelers
+* Executing hotel search
 
-Contiene los **locators de los elementos del sitio web** utilizando `Target` de Serenity.
+### Questions
 
-Clase principal:
+Used to validate application state such as:
 
-**HomeConsultaHotelPageObject**
+* Presence of error messages
+* Verification of hotel location in results
 
-Define todos los elementos interactuables del portal de búsqueda de hoteles:
+### PageObjects
 
-- campo destino
-- calendario de fechas
-- selección de viajeros
-- botones de agregar habitaciones
-- botones de búsqueda
-- mensajes de error
+Contain UI locators used across tasks and questions.
 
-Esto permite centralizar los locators y facilitar su mantenimiento.
+### Models
+
+Represent structured test data used in Cucumber scenarios.
 
 ---
 
-## tasks
+# Example Test Flow
 
-Las **Tasks** representan las acciones que un usuario realiza en el sistema.
+A typical automated scenario performs the following steps:
 
-Principales tareas implementadas:
-
-**SeleccionarDestino**
-
-Permite ingresar un destino en el buscador de hoteles.
-
-**SeleccionarFecha**
-
-Permite seleccionar fechas de check-in y check-out dentro del calendario.
-
-**AgregarHabitacionYViajeros**
-
-Agrega habitaciones y configura el número de viajeros por habitación.
-
-**AjustarHabitacionesYViajeros**
-
-Modifica la configuración de habitaciones y viajeros si ya existe una configuración previa.
-
-Estas tareas implementan el patrón Screenplay utilizando:
+1. User opens the Travelocity website
+2. Selects a destination city
+3. Chooses check-in and check-out dates
+4. Adds travelers and rooms
+5. Executes the hotel search
+6. Validates the results or error messages
 
 ---
 
-## questions
+# Running the Tests
 
-Las **Questions** permiten validar resultados dentro de la interfaz.
+Clone the repository:
 
-**HayUnError**
+```
+git clone https://github.com/ellacosta01/RetoFinal.git
+```
 
-Valida si existen mensajes de error en los formularios.
+Navigate to the project directory:
 
-**LaUbicacionDelHotel**
+```
+cd RetoFinal
+```
 
-Verifica si dentro de los resultados aparece al menos un hotel ubicado en el destino buscado.
+Run the tests using Gradle:
 
----
+```
+gradlew clean test
+```
 
-## utils
-
-Contiene utilidades auxiliares utilizadas por las tareas.
-
-**UtilidadesFechas**
-
-Método que valida si el mes y año esperado están visibles en el calendario antes de seleccionar el día.
-
----
-
-## stepdefinitions
-
-Implementa la conexión entre **Cucumber y Screenplay**.
-
-**BuscarHotelStepDefinitions**
-
-Contiene la implementación de los pasos definidos en los escenarios:
-
-- ingreso de destino
-- selección de fechas
-- configuración de viajeros
-- ejecución de búsqueda
-- validación de resultados
+After execution, Serenity will automatically generate the test reports.
 
 ---
 
-## runners
+# Serenity Reports
 
-Clase encargada de ejecutar los escenarios de prueba.
+Serenity automatically generates detailed reports that include:
 
-**BuscarHotelRunner**
+* Test execution results
+* Step-by-step screenshots
+* Test evidence
+* Scenario outcomes
 
-Define:
+Reports are generated in:
 
-- ubicación de los archivos feature
-- ubicación de los step definitions
-- integración con Serenity BDD
-
----
-
-## features
-
-Contiene los **escenarios escritos en Gherkin**.
-
-Principales funcionalidades cubiertas:
-
-### BuscarHotel.feature
-
-Valida escenarios como:
-
-- búsqueda básica de hoteles
-- búsqueda con fechas
-- validación de mensajes de error
-- configuración de habitaciones y viajeros
-
-### InicioSesion.feature
-
-Define escenarios de inicio de sesión:
-
-- login exitoso
-- login fallido
-- validación de mensajes de error
-
-Actualmente estos escenarios están marcados como **manuales**.
-
-### Registro.feature
-
-Define escenarios de registro de usuario:
-
-- registro exitoso
-- correo existente
-- claves no coincidentes
-- datos obligatorios vacíos
-
-También definidos como **pruebas manuales**.
-
----
-
-# Ejecución del proyecto
-
-El proyecto utiliza **Gradle** como sistema de construcción.
-
-Para ejecutar las pruebas:
-./gradlew test
-
-Después de ejecutar las pruebas, Serenity genera un reporte en:
+```
 target/site/serenity/index.html
+```
+
+Open the report in your browser to review test results.
 
 ---
 
-# Notas importantes
+# Configuration
 
-Este proyecto fue desarrollado con versiones anteriores de Serenity y Gradle.
+The project uses the following configuration file:
 
-Si se clona el repositorio, es recomendable validar:
+```
+serenity.properties
+```
 
-- versión de Java
-- versión de Gradle
-- compatibilidad de dependencias
-- posibles cambios en el DOM del portal Travelocity
+Example configuration:
 
-La lógica de automatización y la arquitectura del proyecto se mantienen, pero pueden requerirse ajustes de entorno para su correcta ejecución.
+```
+webdriver.driver=chrome
+chrome.switches=--start-maximized,--incognito
+
+serenity.project.name=Travelocity Automation Framework
+serenity.take.screenshots=FOR_EACH_ACTION
+serenity.report.encoding=UTF-8
+
+serenity.timeout=10000
+webdriver.wait.for.timeout=10000
+webdriver.timeouts.implicitlywait=10000
+```
 
 ---
 
-# Autor
+# Example Feature Scenario
 
+<<<<<<< HEAD
 
 Proyecto desarrollado como ejercicio de automatización utilizando Serenity BDD y Screenplay Pattern.
+=======
+```
+Scenario: Search for hotels successfully
+  Given that I enter the travelocity portal
+  When I enter the basic information to search for a hotel
+  And I add rooms and travelers
+  And I execute the search
+  Then I should see at least one hotel result
+```
+
+---
+
+# Key Design Principles
+
+The framework follows these automation principles:
+
+* **Separation of responsibilities**
+* **Reusable test components**
+* **Readable test scenarios**
+* **Maintainable architecture**
+* **Clear test reporting**
+
+---
+
+# Future Improvements
+
+Potential enhancements for the framework:
+
+* CI/CD integration
+* Parallel test execution
+* Cross-browser testing
+* API validation for backend services
+* Test data externalization
+
+---
+
+# Author
+
+Automation framework created as part of a QA automation practice project.
+
+Author: **Ella Acosta**
+
+---
+
+# License
+
+This project is intended for educational and demonstration purposes.
+>>>>>>> 705e4df (Add readme y mejora de la estructura)

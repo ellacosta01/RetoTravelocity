@@ -11,53 +11,69 @@ import static com.travelocity.utils.UtilidadesFechas.estaLaFechaPresente;
 
 public class SeleccionarFecha implements Task {
 
-    private final String dia;
-    private final String mes;
+    private final String day;
+    private final String month;
     private final String year;
-    private final String operacion;
+    private final String operation;
 
-    public SeleccionarFecha(String dia, String mes, String year, String operacion) {
-        this.dia = dia;
-        this.mes = mes;
+    public SeleccionarFecha(String day, String month, String year, String operation) {
+        this.day = day;
+        this.month = month;
         this.year = year;
-        this.operacion = operacion;
+        this.operation = operation;
     }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
-        String mesYear = mes + " " + year;
+        openCalendar(actor);
+        goToTargetMonth(actor);
+        selectDay(actor);
+        applyDateSelection(actor);
+    }
 
-        switch (operacion.toLowerCase()) {
-            case "checkin":
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CHECK_IN));
-                break;
-            case "checkout":
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CHECK_OUT));
-                break;
-            default:
-                throw new IllegalArgumentException("Operacion no soportada: " + operacion);
+    private <T extends Actor> void openCalendar(T actor) {
+        if ("checkin".equalsIgnoreCase(operation)) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CHECK_IN));
+            return;
         }
+
+        if ("checkout".equalsIgnoreCase(operation)) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CHECK_OUT));
+            return;
+        }
+
+        throw new IllegalArgumentException("Unsupported operation: " + operation);
+    }
+
+    private <T extends Actor> void goToTargetMonth(T actor) {
+        String targetMonthYear = month + " " + year;
 
         while (!estaLaFechaPresente(
                 HomeConsultaHotelPageObject.LBL_MES_YEAR_EN_CALENDARIO.resolveAllFor(actor),
-                mesYear)) {
+                targetMonthYear)) {
             actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_SIGUIENTE_MES));
         }
-
-        String inicialesMes = mes.substring(0, 3);
-        String localizador = inicialesMes + " " + dia + ", " + year;
-
-        actor.attemptsTo(
-                Click.on(HomeConsultaHotelPageObject.BTN_DIA_EN_CALENDARIO.of(localizador)),
-                Click.on(HomeConsultaHotelPageObject.BTN_CALENDARIO_DONE)
-        );
     }
 
-    public static SeleccionarFecha deCheckIn(String checkInDia, String checkInMes, String checkInYear) {
-        return Tasks.instrumented(SeleccionarFecha.class, checkInDia, checkInMes, checkInYear, "CheckIn");
+    private <T extends Actor> void selectDay(T actor) {
+        String dayAriaLabel = buildDayAriaLabel();
+        actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_DIA_EN_CALENDARIO.of(dayAriaLabel)));
     }
 
-    public static Performable deCheckOut(String checkOutDia, String checkOutMes, String checkOutYear) {
-        return Tasks.instrumented(SeleccionarFecha.class, checkOutDia, checkOutMes, checkOutYear, "CheckOut");
+    private <T extends Actor> void applyDateSelection(T actor) {
+        actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_CALENDARIO_DONE));
+    }
+
+    private String buildDayAriaLabel() {
+        String monthAbbreviation = month.substring(0, 3);
+        return monthAbbreviation + " " + day + ", " + year;
+    }
+
+    public static SeleccionarFecha deCheckIn(String day, String month, String year) {
+        return Tasks.instrumented(SeleccionarFecha.class, day, month, year, "checkin");
+    }
+
+    public static Performable deCheckOut(String day, String month, String year) {
+        return Tasks.instrumented(SeleccionarFecha.class, day, month, year, "checkout");
     }
 }

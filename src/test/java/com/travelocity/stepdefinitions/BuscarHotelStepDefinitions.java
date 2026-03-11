@@ -11,6 +11,7 @@ import com.travelocity.tasks.SeleccionarDestino;
 import com.travelocity.tasks.SeleccionarFecha;
 import io.cucumber.java.es.Cuando;
 import io.cucumber.java.es.Entonces;
+import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.actions.Click;
 
 import java.util.List;
@@ -23,77 +24,93 @@ public class BuscarHotelStepDefinitions {
 
     @Cuando("ingreso los datos basicos para buscar un hotel")
     public void ingresoLosDatosBasicosParaBuscarUnHotel(List<CiudadDeEstadia> listaCiudadDeEstadia) {
-        theActorInTheSpotlight().attemptsTo(
-                SeleccionarDestino.deHoteleria(listaCiudadDeEstadia.get(0).getDestino())
-        );
-        theActorInTheSpotlight().attemptsTo(
+        Actor actor = theActorInTheSpotlight();
+        CiudadDeEstadia ciudadDeEstadia = listaCiudadDeEstadia.get(0);
+
+        actor.attemptsTo(
+                SeleccionarDestino.deHoteleria(ciudadDeEstadia.getDestino()),
                 SeleccionarFecha.deCheckIn(
-                        listaCiudadDeEstadia.get(0).getCheckInDia(),
-                        listaCiudadDeEstadia.get(0).getCheckInMes(),
-                        listaCiudadDeEstadia.get(0).getCheckInYear()
-                )
-        );
-        theActorInTheSpotlight().attemptsTo(
+                        ciudadDeEstadia.getCheckInDia(),
+                        ciudadDeEstadia.getCheckInMes(),
+                        ciudadDeEstadia.getCheckInYear()
+                ),
                 SeleccionarFecha.deCheckOut(
-                        listaCiudadDeEstadia.get(0).getCheckOutDia(),
-                        listaCiudadDeEstadia.get(0).getCheckOutMes(),
-                        listaCiudadDeEstadia.get(0).getCheckOutYear()
+                        ciudadDeEstadia.getCheckOutDia(),
+                        ciudadDeEstadia.getCheckOutMes(),
+                        ciudadDeEstadia.getCheckOutYear()
                 )
         );
     }
 
     @Cuando("ingreso las habitaciones que necesito y viajeros que van conmigo")
     public void ingresoLasHabitacionesQueNecesitoYViajerosQueVanConmigo(List<HabitacionesEstadia> listaHabitacionesEstadia) {
-        theActorInTheSpotlight().attemptsTo(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.attemptsTo(
                 AgregarHabitacionYViajeros.deHotel(listaHabitacionesEstadia)
         );
     }
 
     @Cuando("ajusto el formulario de viajeros")
     public void ajustoElFormularioDeViajeros(List<HabitacionesEstadia> listaHabitacionesEstadia) {
-        theActorInTheSpotlight().attemptsTo(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.attemptsTo(
                 AjustarHabitacionesYViajeros.deHotel(listaHabitacionesEstadia)
         );
     }
 
     @Cuando("ejecuto la busqueda")
     public void ejecutoLaBusqueda() {
-        theActorInTheSpotlight().attemptsTo(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.attemptsTo(
                 Click.on(HomeConsultaHotelPageObject.BTN_BUSCAR_HOTEL)
         );
     }
 
     @Cuando("ingreso el destino {string}")
     public void ingresoElDestino(String destino) {
-        theActorInTheSpotlight().attemptsTo(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.attemptsTo(
                 SeleccionarDestino.deHoteleria(destino)
         );
     }
 
     @Entonces("deberia ver al menos un hotel de resultado en {string}")
     public void deberiaVerAlMenosUnHotelDeResultadoEn(String destino) {
-        theActorInTheSpotlight().should(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.should(
                 seeThat(LaUbicacionDelHotel.apareceEnAlMenosUnResultado(destino), equalTo(true))
         );
     }
 
     @Entonces("deberia ver un mensaje de error en el formulario de viajeros")
     public void deberiaVerUnMensajeDeErrorEnElFormularioDeViajeros() {
-        theActorInTheSpotlight().should(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.should(
                 seeThat(HayUnError.enElFormularioDeViajeros(), equalTo(true))
         );
     }
 
     @Entonces("el mensaje de error deberia tener el siguiente texto:")
     public void elMensajeDeErrorDeberiaTenerElSiguienteTexto(List<String> listaMensajeError) {
-        theActorInTheSpotlight().should(
-                seeThat(HayUnError.conElMensaje(), equalTo(listaMensajeError.get(0)))
+        Actor actor = theActorInTheSpotlight();
+        String mensajeEsperado = listaMensajeError.get(0);
+
+        actor.should(
+                seeThat(HayUnError.conElMensaje(), equalTo(mensajeEsperado))
         );
     }
 
     @Entonces("deberia ver un mensaje de error en el formulario de busqueda de Hotel")
     public void deberiaVerUnMensajeDeErrorEnElFormularioDeBusquedaDeHotel() {
-        theActorInTheSpotlight().should(
+        Actor actor = theActorInTheSpotlight();
+
+        actor.should(
                 seeThat(HayUnError.enElFormularioDeBusquedaDeHotel(), equalTo(true))
         );
     }

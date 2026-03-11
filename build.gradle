@@ -1,6 +1,14 @@
 plugins {
     id 'java'
-    id "net.serenity-bdd.serenity-gradle-plugin" version "3.9.8"
+    id 'net.serenity-bdd.serenity-gradle-plugin' version '3.9.8'
+}
+
+group = 'com.travelocity'
+version = '1.0.0'
+
+ext {
+    serenityVersion = '3.9.8'
+    cucumberVersion = '6.11.0'
 }
 
 repositories {
@@ -8,18 +16,16 @@ repositories {
 }
 
 dependencies {
+    implementation "net.serenity-bdd:serenity-core:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-junit:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:${serenityVersion}"
+    implementation "net.serenity-bdd:serenity-cucumber6:${serenityVersion}"
 
-    implementation "net.serenity-bdd:serenity-core:3.9.8"
-    implementation "net.serenity-bdd:serenity-junit:3.9.8"
-    implementation "net.serenity-bdd:serenity-screenplay:3.9.8"
-    implementation "net.serenity-bdd:serenity-screenplay-webdriver:3.9.8"
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit:${cucumberVersion}"
 
-    implementation "net.serenity-bdd:serenity-cucumber6:3.9.8"
-
-    testImplementation "io.cucumber:cucumber-java:6.11.0"
-    testImplementation "io.cucumber:cucumber-junit:6.11.0"
-
-    implementation "org.slf4j:slf4j-simple:2.0.7"
+    implementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 test {

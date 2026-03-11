@@ -5,18 +5,27 @@ import net.serenitybdd.screenplay.Question;
 
 public class HayUnError {
 
+    private HayUnError() {
+    }
+
     public static Question<Boolean> enElFormularioDeViajeros() {
         return actor ->
-                HomeConsultaHotelPageObject.DIV_ERROR_FORMULARIO_VIAJERO.resolveFor(actor).isVisible();
+                HomeConsultaHotelPageObject.DIV_ERROR_FORMULARIO_VIAJERO
+                        .resolveFor(actor)
+                        .isVisible();
     }
 
     public static Question<Boolean> enElFormularioDeBusquedaDeHotel() {
         return actor ->
-                HomeConsultaHotelPageObject.DIV_ERROR_FORMULARIO_BUSQUEDA_HOTEL.resolveFor(actor).isVisible();
+                HomeConsultaHotelPageObject.DIV_ERROR_FORMULARIO_BUSQUEDA_HOTEL
+                        .resolveFor(actor)
+                        .isVisible();
     }
 
     public static Question<String> conElMensaje() {
         return actor ->
-                HomeConsultaHotelPageObject.LBL_ERROR_FORMULARIO_GENERICO.resolveFor(actor).getText();
+                HomeConsultaHotelPageObject.LBL_ERROR_FORMULARIO_GENERICO
+                        .resolveFor(actor)
+                        .getText();
     }
 }

@@ -11,77 +11,93 @@ import java.util.List;
 
 public class AgregarHabitacionYViajeros implements Task {
 
-    private final List<HabitacionesEstadia> listaHabitacionesEstadia;
+    private final List<HabitacionesEstadia> habitacionesEstadiaList;
 
-    public AgregarHabitacionYViajeros(List<HabitacionesEstadia> listaHabitacionesEstadia) {
-        this.listaHabitacionesEstadia = listaHabitacionesEstadia;
+    public AgregarHabitacionYViajeros(List<HabitacionesEstadia> habitacionesEstadiaList) {
+        this.habitacionesEstadiaList = habitacionesEstadiaList;
     }
 
     @Override
     public <T extends Actor> void performAs(T actor) {
         actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_VIAJEROS));
 
-        for (HabitacionesEstadia habitacionesEstadia : listaHabitacionesEstadia) {
+        for (HabitacionesEstadia habitacion : habitacionesEstadiaList) {
+            ensureRoomExists(actor, habitacion);
 
-            if (HomeConsultaHotelPageObject.DIV_HABITACION
-                    .of(habitacionesEstadia.getHabitacion())
-                    .resolveAllFor(actor).isEmpty()) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_HABITACION));
-            }
+            String roomIndex = getRoomIndex(habitacion);
+            int expectedAdults = Integer.parseInt(habitacion.getAdultos());
+            int expectedChildren = Integer.parseInt(habitacion.getJovenes());
 
-            int indiceHabitacion = Integer.parseInt(habitacionesEstadia.getHabitacion()) - 1;
-            String habitacionIndex = String.valueOf(indiceHabitacion);
-
-            int adultosEsperados = Integer.parseInt(habitacionesEstadia.getAdultos());
-            int jovenesEsperados = Integer.parseInt(habitacionesEstadia.getJovenes());
-
-            int adultosActuales = Integer.parseInt(
-                    HomeConsultaHotelPageObject.LBL_ADULTOS
-                            .of(habitacionIndex).resolveFor(actor).getValue()
-            );
-
-            int jovenesActuales = Integer.parseInt(
-                    HomeConsultaHotelPageObject.LBL_JOVENES
-                            .of(habitacionIndex).resolveFor(actor).getValue()
-            );
-
-            while (adultosActuales < adultosEsperados) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_ADULTO.of(habitacionIndex)));
-                adultosActuales = Integer.parseInt(
-                        HomeConsultaHotelPageObject.LBL_ADULTOS
-                                .of(habitacionIndex).resolveFor(actor).getValue()
-                );
-            }
-
-            while (adultosActuales > adultosEsperados) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_ADULTO.of(habitacionIndex)));
-                adultosActuales = Integer.parseInt(
-                        HomeConsultaHotelPageObject.LBL_ADULTOS
-                                .of(habitacionIndex).resolveFor(actor).getValue()
-                );
-            }
-
-            while (jovenesActuales < jovenesEsperados) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_JOVEN.of(habitacionIndex)));
-                jovenesActuales = Integer.parseInt(
-                        HomeConsultaHotelPageObject.LBL_JOVENES
-                                .of(habitacionIndex).resolveFor(actor).getValue()
-                );
-            }
-
-            while (jovenesActuales > jovenesEsperados) {
-                actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_JOVEN.of(habitacionIndex)));
-                jovenesActuales = Integer.parseInt(
-                        HomeConsultaHotelPageObject.LBL_JOVENES
-                                .of(habitacionIndex).resolveFor(actor).getValue()
-                );
-            }
+            adjustAdults(actor, roomIndex, expectedAdults);
+            adjustChildren(actor, roomIndex, expectedChildren);
         }
 
         actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_VIAJEROS_DONE));
     }
 
-    public static AgregarHabitacionYViajeros deHotel(List<HabitacionesEstadia> listaHabitacionesEstadia) {
-        return Tasks.instrumented(AgregarHabitacionYViajeros.class, listaHabitacionesEstadia);
+    private <T extends Actor> void ensureRoomExists(T actor, HabitacionesEstadia habitacion) {
+        boolean roomExists = !HomeConsultaHotelPageObject.DIV_HABITACION
+                .of(habitacion.getHabitacion())
+                .resolveAllFor(actor)
+                .isEmpty();
+
+        if (!roomExists) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_HABITACION));
+        }
+    }
+
+    private String getRoomIndex(HabitacionesEstadia habitacion) {
+        int roomNumber = Integer.parseInt(habitacion.getHabitacion());
+        return String.valueOf(roomNumber - 1);
+    }
+
+    private <T extends Actor> void adjustAdults(T actor, String roomIndex, int expectedAdults) {
+        int currentAdults = getCurrentAdults(actor, roomIndex);
+
+        while (currentAdults < expectedAdults) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_ADULTO.of(roomIndex)));
+            currentAdults = getCurrentAdults(actor, roomIndex);
+        }
+
+        while (currentAdults > expectedAdults) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_ADULTO.of(roomIndex)));
+            currentAdults = getCurrentAdults(actor, roomIndex);
+        }
+    }
+
+    private <T extends Actor> void adjustChildren(T actor, String roomIndex, int expectedChildren) {
+        int currentChildren = getCurrentChildren(actor, roomIndex);
+
+        while (currentChildren < expectedChildren) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_AGREGAR_JOVEN.of(roomIndex)));
+            currentChildren = getCurrentChildren(actor, roomIndex);
+        }
+
+        while (currentChildren > expectedChildren) {
+            actor.attemptsTo(Click.on(HomeConsultaHotelPageObject.BTN_RETIRAR_JOVEN.of(roomIndex)));
+            currentChildren = getCurrentChildren(actor, roomIndex);
+        }
+    }
+
+    private <T extends Actor> int getCurrentAdults(T actor, String roomIndex) {
+        return Integer.parseInt(
+                HomeConsultaHotelPageObject.LBL_ADULTOS
+                        .of(roomIndex)
+                        .resolveFor(actor)
+                        .getValue()
+        );
+    }
+
+    private <T extends Actor> int getCurrentChildren(T actor, String roomIndex) {
+        return Integer.parseInt(
+                HomeConsultaHotelPageObject.LBL_JOVENES
+                        .of(roomIndex)
+                        .resolveFor(actor)
+                        .getValue()
+        );
+    }
+
+    public static AgregarHabitacionYViajeros deHotel(List<HabitacionesEstadia> habitacionesEstadiaList) {
+        return Tasks.instrumented(AgregarHabitacionYViajeros.class, habitacionesEstadiaList);
     }
 }

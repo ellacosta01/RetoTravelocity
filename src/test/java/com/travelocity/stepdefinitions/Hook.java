@@ -9,15 +9,18 @@ import net.serenitybdd.screenplay.actors.OnlineCast;
 import net.thucydides.core.annotations.Managed;
 import org.openqa.selenium.WebDriver;
 
-public class Hook {
+public class Hooks {
+
+    private static final String ACTOR = "El usuario";
 
     @Managed
-    private WebDriver hisBrowser;
+    private WebDriver driver;
 
     @Before
     public void setUp() {
         OnStage.setTheStage(new OnlineCast());
-        OnStage.theActorCalled("El usuario").can(BrowseTheWeb.with(hisBrowser));
+        OnStage.theActorCalled(ACTOR)
+                .can(BrowseTheWeb.with(driver));
     }
 
     @Dado("que ingreso al portal travelocity.com")

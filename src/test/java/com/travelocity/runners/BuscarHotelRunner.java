@@ -7,9 +7,11 @@ import org.junit.runner.RunWith;
 
 @RunWith(CucumberWithSerenity.class)
 @CucumberOptions(
-        features = "src/test/resources/features/BuscarHotel.feature",
+        features = "src/test/resources/features",
         glue = "com.travelocity.stepdefinitions",
-        snippets = SnippetType.CAMELCASE
+        snippets = SnippetType.CAMELCASE,
+        tags = "@buscarHotel",
+        publish = false
 )
 public class BuscarHotelRunner {
 }

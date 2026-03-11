@@ -6,8 +6,12 @@ import java.util.List;
 
 public class UtilidadesFechas {
 
+    private UtilidadesFechas() {
+    }
+
     public static boolean estaLaFechaPresente(List<WebElementFacade> listaFechas, String fechaEsperada) {
         return listaFechas.stream()
-                .anyMatch(fecha -> fecha.getText().equals(fechaEsperada));
+                .map(WebElementFacade::getText)
+                .anyMatch(fechaEsperada::equals);
     }
 }
