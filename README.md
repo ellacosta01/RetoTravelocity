@@ -35,55 +35,49 @@ The automation follows the **Screenplay Pattern**, which improves readability, r
 
 ---
 
-# Project Structure
+## Project Structure
 
-The project follows a **layered Screenplay architecture**:
+```text
+src
+ ├── main
+ │   └── java
+ │       └── com.travelocity
+ │           ├── models
+ │           │   ├── CiudadDeEstadia.java
+ │           │   └── HabitacionesEstadia.java
+ │           │
+ │           ├── pageobjects
+ │           │   └── HomeConsultaHotelPageObject.java
+ │           │
+ │           ├── questions
+ │           │   ├── HayUnError.java
+ │           │   └── LaUbicacionDelHotel.java
+ │           │
+ │           ├── tasks
+ │           │   ├── SeleccionarDestino.java
+ │           │   ├── SeleccionarFecha.java
+ │           │   ├── AgregarHabitacionYViajeros.java
+ │           │   └── AjustarHabitacionesYViajeros.java
+ │           │
+ │           └── utils
+ │               └── UtilidadesFechas.java
+ │
+ └── test
+     └── java
+         └── com.travelocity
+             ├── runners
+             │   └── BuscarHotelRunner.java
+             │
+             └── stepdefinitions
+                 ├── BuscarHotelStepDefinitions.java
+                 └── Hooks.java
 
+src/test/resources
+ └── features
+     ├── BuscarHotel.feature
+     ├── InicioSesion.feature
+     └── Registro.feature
 ```
-RetoTravelocity
-│
-├── build.gradle
-├── serenity.properties
-│
-├── src
-│   ├── main
-│   │   └── java
-│   │       └── com.travelocity
-│   │           ├── models
-│   │           │   ├── CiudadDeEstadia.java
-│   │           │   └── HabitacionesEstadia.java
-│   │           │
-│   │           ├── pageobjects
-│   │           │   └── HomeConsultaHotelPageObject.java
-│   │           │
-│   │           ├── questions
-│   │           │   ├── HayUnError.java
-│   │           │   └── LaUbicacionDelHotel.java
-│   │           │
-│   │           ├── tasks
-│   │           │   ├── SeleccionarDestino.java
-│   │           │   ├── SeleccionarFecha.java
-│   │           │   ├── AgregarHabitacionYViajeros.java
-│   │           │   └── AjustarHabitacionesYViajeros.java
-│   │           │
-│   │           └── utils
-│   │               └── UtilidadesFechas.java
-│   │
-│   └── test
-│       └── java
-│           └── com.travelocity
-│               ├── runners
-│               │   └── BuscarHotelRunner.java
-│               │
-│               └── stepdefinitions
-│                   ├── BuscarHotelStepDefinitions.java
-│                   └── Hooks.java
-│
-└── src/test/resources
-    └── features
-        └── BuscarHotel.feature
-```
-
 ---
 
 # Test Architecture
@@ -248,6 +242,7 @@ Author: **Ella Acosta**
 # License
 
 This repository is intended for educational and demonstration purposes.
+
 
 
 
